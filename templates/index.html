@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>論文整理網頁</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>論文整理網頁</h1>
+
+    <div id="form-container">
+        <h2>新增論文</h2>
+        <input type="text" id="title" placeholder="標題">
+        <input type="text" id="author" placeholder="作者">
+        <input type="number" id="year" placeholder="年份">
+        <input type="text" id="link" placeholder="連結">
+        <textarea id="abstract" placeholder="摘要"></textarea>
+        <input type="text" id="tags" placeholder="標籤（逗號分隔）">
+        <button onclick="addPaper()">新增</button>
+    </div>
+
+    <h2>論文列表</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>標題</th>
+                <th>作者</th>
+                <th>年份</th>
+                <th>連結</th>
+                <th>摘要</th>
+                <th>標籤</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody id="paperBody"></tbody>
+    </table>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

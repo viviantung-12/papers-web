@@ -1,0 +1,100 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 0 15px;
+    background-color: #f4f9f4;
+    color: #2c3e50;
+}
+
+h1, h2 { text-align: center; color: #145214; }
+
+#form-container {
+    background-color: #ffffff;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* 表單兩欄排列 */
+#form-container input {
+    display: inline-block;
+    width: 48%;
+    margin: 8px 1%;
+    padding: 10px;
+    border: 1px solid #c5e1c5;
+    border-radius: 5px;
+    background-color: #ecf6ec;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+#form-container textarea {
+    width: 98%;
+    margin: 8px 1%;
+    padding: 10px;
+    border: 1px solid #c5e1c5;
+    border-radius: 5px;
+    background-color: #ecf6ec;
+    font-size: 14px;
+    box-sizing: border-box;
+    height: 80px;
+}
+
+#form-container button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #7bc67b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+#form-container button:hover { background-color: #4cae4c; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+th {
+    background-color: #d9efd9;
+    color: #145214;
+    text-align: left;
+    padding: 12px;
+}
+
+td { padding: 10px; border-bottom: 1px solid #e1e4e8; }
+
+tbody tr:hover { background-color: #e6f4e6; }
+
+.tag {
+    display: inline-block;
+    padding: 2px 8px;
+    margin: 2px;
+    background-color: #b3e6b3;
+    color: #145214;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.delete-btn {
+    padding: 4px 8px;
+    background-color: #e67e22;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s;
+}
+
+.delete-btn:hover { background-color: #d35400; }
