@@ -1,74 +1,66 @@
 from flask import Flask, render_template, request, jsonify
-import sqlite3, os
+import sqlite3
+import os
 
 app = Flask(__name__)
-DB_PATH = os.path.join(os.getcwd(), "papers.db")
 
-# 初始化資料庫
+DB_FILE = "papers.db"
+
+# 初始化資料庫（如果不存在就建立）
 def init_db():
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute('''
+    if not os.path.exists(DB_FILE):
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        c.execute("""
         CREATE TABLE IF NOT EXISTS papers (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL,
-            author TEXT NOT NULL,
-            year INTEGER,
-            link TEXT,
-            abstract TEXT,
+            title TEXT,
+            author TEXT,
+            year TEXT,
             tags TEXT
         )
-    ''')
-    conn.commit()
-    conn.close()
+        """)
+        conn.commit()
+        conn.close()
 
 init_db()
 
-# 首頁
+# 取得所有論文
+@app.route("/get_papers")
+def get_papers():
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute("SELECT * FROM papers")
+    papers = c.fetchall()
+    conn.close()
+    return jsonify([{"id": p[0], "title": p[1], "author": p[2], "year": p[3], "tags": p[4]} for p in papers])
+
+# 新增論文
+@app.route("/add_paper", methods=["POST"])
+def add_paper():
+    data = request.get_json()
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute("INSERT INTO papers (title, author, year, tags) VALUES (?, ?, ?, ?)",
+              (data["title"], data["author"], data["year"], data.get("tags","")))
+    conn.commit()
+    conn.close()
+    return jsonify({"status": "success"})
+
+# 刪除論文
+@app.route("/delete_paper", methods=["POST"])
+def delete_paper():
+    data = request.get_json()
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute("DELETE FROM papers WHERE id = ?", (data["id"],))
+    conn.commit()
+    conn.close()
+    return jsonify({"status": "success"})
+
 @app.route("/")
 def index():
     return render_template("index.html")
 
-# 取得所有論文
-@app.route("/api/papers")
-def api_get_papers():
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("SELECT id, title, author, year, link, abstract, tags FROM papers ORDER BY id DESC")
-    rows = c.fetchall()
-    conn.close()
-    papers = [
-        {"id": r[0], "title": r[1], "author": r[2], "year": r[3],
-         "link": r[4], "abstract": r[5], "tags": r[6]}
-        for r in rows
-    ]
-    return jsonify(papers)
-
-# 新增論文
-@app.route("/api/add", methods=["POST"])
-def api_add():
-    data = request.get_json()
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute(
-        "INSERT INTO papers (title, author, year, link, abstract, tags) VALUES (?, ?, ?, ?, ?, ?)",
-        (data["title"], data["author"], data.get("year"),
-         data.get("link"), data.get("abstract"), data.get("tags"))
-    )
-    conn.commit()
-    conn.close()
-    return jsonify({"status": "success"})
-
-# 刪除單筆論文
-@app.route("/api/delete/<int:paper_id>", methods=["DELETE"])
-def api_delete(paper_id):
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("DELETE FROM papers WHERE id = ?", (paper_id,))
-    conn.commit()
-    conn.close()
-    return jsonify({"status": "success"})
-
 if __name__ == "__main__":
-    import os
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    app.run(debug=True)
