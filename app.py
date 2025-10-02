@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 
-DB_FILE = "papers.db"
+DB_FILE = os.path.join(os.path.dirname(__file__), "papers.db")
 
 # 初始化資料庫（如果不存在就建立）
 def init_db():
